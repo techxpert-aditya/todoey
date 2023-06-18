@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todoey/screens/add_task_screen.dart';
+
+import '../widgets/tasks_list.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -8,14 +11,18 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  List<bool> checkedList = <bool>[false, false, false];
-  final List<String> tasks = <String>['be Good', 'be Brave', 'be Bold'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) => const AddTaskScreen(),
+          );
+        },
         backgroundColor: Colors.lightBlueAccent,
         child: const Icon(Icons.add),
       ),
@@ -58,6 +65,7 @@ class _TasksScreenState extends State<TasksScreen> {
           //the list view of tasks
           Expanded(
             child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -65,41 +73,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: ListView.builder(
-                itemCount: tasks.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: SizedBox(
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              tasks[index],
-                              style: TextStyle(
-                                  decoration: checkedList[index]
-                                      ? TextDecoration.lineThrough
-                                      : TextDecoration.none,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18),
-                            ),
-                          ),
-                          Checkbox(
-                            value: checkedList[index],
-                            onChanged: (bool? value) {
-                              setState(() {
-                                checkedList[index] = value ?? false;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+              child: const TasksList(),
             ),
           ),
         ],
